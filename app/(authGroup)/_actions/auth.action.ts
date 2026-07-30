@@ -25,7 +25,7 @@ export const loginAction = async (prevState: LoginState, formData: FormData): Pr
         password: formData.get("password")?.toString() ?? "",
     }
 
-    // ✅ validation
+    //  validation
     const parsed = loginSchema.safeParse(raw)
 
     if (!parsed.success) {

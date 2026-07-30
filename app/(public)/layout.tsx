@@ -2,7 +2,7 @@ import { Navbar } from "@/components/shared/navbar";
 import { getMe } from "@/services/getMe";
 // import { getMe } from "@/service/getMe";
 
-const DashboardLayout = async (
+const PublicGroupLayout = async (
     {
         children
     } : {
@@ -18,4 +18,4 @@ const DashboardLayout = async (
   )
 }
 
-export default DashboardLayout
+export default PublicGroupLayout
