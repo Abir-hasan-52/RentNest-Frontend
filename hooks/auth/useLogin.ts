@@ -1,16 +1,4 @@
-// "use client";
-
-// import { useMutation } from "@tanstack/react-query";
-// import { loginUser } from "@/services/auth/auth.api";
-
-// export const useLogin = () => {
-//   return useMutation({
-//     mutationKey: ["login"],
-//     mutationFn: loginUser,
-//   });
-// };
-
-
+ 
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
@@ -18,8 +6,8 @@ import { AxiosError } from "axios";
 import { toast } from "sonner";
 
 import { loginUser } from "@/services/auth/auth.api";
-import { ApiErrorResponse } from "@/types/api.types";
-// import { ApiErrorResponse } from "@/types/api.types";
+import { LoginApiErrorResponse } from "@/types/api.types";
+
 
 export const useLogin = () => {
   return useMutation({
@@ -31,7 +19,7 @@ export const useLogin = () => {
       console.log(data);
     },
 
-    onError: (error: AxiosError<ApiErrorResponse>) => {
+    onError: (error: AxiosError<LoginApiErrorResponse>) => {
       toast.error(
         error.response?.data?.message || "Something went wrong!"
       );

@@ -1,137 +1,118 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Eye, EyeOff, House, Loader2 } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useActionState, useEffect, useState } from "react"
+import { toast } from "sonner"
+import { loginAction } from "../_actions/auth.action"
 
- 
-import { useLogin } from "@/hooks/auth/useLogin";
+const LoginForm = () => {
 
-import { loginSchema, LoginFormData } from "../_schemas/login.schema";
+    const [state, action, pending] = useActionState(loginAction, null)
+    const [showPassword, setShowPassword] = useState(false)
+    const router = useRouter()
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
- 
+    useEffect(() => {
+        if (!state) return;
 
-export default function LoginForm() {
-  const [showPassword, setShowPassword] = useState(false);
-  const { mutate, isPending } = useLogin();
+        if (state.success) {
+            toast.success(state.message || "Login Successful");
+            router.push("/dashboard/admin");
+        } else if (!state.errors) {
+            toast.error(state.message || "Login failed");
+        }
+    }, [state, router]);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+    return (
+        <div className="w-full">
+            {/* Mobile-only branding, since AuthHero is hidden below lg */}
+            <div className="mb-8 flex flex-col items-center gap-3 lg:hidden">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+                    <House size={28} />
+                </div>
+                <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                    Welcome to <span className="text-primary">RentNest</span>
+                </h1>
+            </div>
 
-  const onSubmit = (data: LoginFormData) => {
-    mutate(data);
-  };
+            <Card className="border-border p-6 shadow-xl shadow-black/5 sm:p-8">
+                <div className="mb-6 space-y-1.5">
+                    <h2 className="text-2xl font-semibold tracking-tight text-foreground">
+                        Log in
+                    </h2>
+                    <p className="text-sm text-muted-foreground">
+                        Enter your credentials to access your account
+                    </p>
+                </div>
 
-  return (
-    <Card className="rounded-3xl border border-border/60 bg-card/90 p-6 shadow-2xl backdrop-blur-xl sm:p-8">
-      <div className="mb-8 space-y-2 text-center">
-        <h2 className="text-3xl font-bold tracking-tight">Welcome Back 👋</h2>
+                <form action={action} className="space-y-5" noValidate>
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="you@example.com"
+                            aria-invalid={!!state?.errors?.email}
+                        />
+                        {state?.errors?.email && (
+                            <p className="text-sm text-destructive">
+                                {state.errors.email[0]}
+                            </p>
+                        )}
+                    </div>
 
-        <p className="text-muted-foreground">
-          Sign in to continue to your RentNest account.
-        </p>
-      </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="password">Password</Label>
+                        <div className="relative">
+                            <Input
+                                id="password"
+                                name="password"
+                                type={showPassword ? "text" : "password"}
+                                placeholder="••••••••"
+                                aria-invalid={!!state?.errors?.password}
+                                className="pr-10"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                tabIndex={-1}
+                                aria-label={showPassword ? "Hide password" : "Show password"}
+                            >
+                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
+                        </div>
+                        {state?.errors?.password && (
+                            <p className="text-sm text-destructive">
+                                {state.errors.password[0]}
+                            </p>
+                        )}
+                    </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        {/* Email */}
-        <div>
-          <div className="relative">
-            <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                    <Button type="submit" disabled={pending} className="w-full">
+                        {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {pending ? "Logging in..." : "Login"}
+                    </Button>
+                </form>
 
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              className="h-12 rounded-xl pl-12"
-              {...register("email")}
-            />
-          </div>
-
-          {errors.email && (
-            <p className="mt-2 text-sm text-red-500">{errors.email.message}</p>
-          )}
+                <p className="mt-6 text-center text-sm text-muted-foreground">
+                    Don&apos;t have an account?{" "}
+                    <Link
+                        href="/register"
+                        className="font-medium text-primary underline-offset-4 hover:underline"
+                    >
+                        Sign up
+                    </Link>
+                </p>
+            </Card>
         </div>
-
-        {/* Password */}
-        <div>
-          <div className="relative">
-            <Lock className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-
-            <Input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              className="h-12 rounded-xl pl-12 pr-12"
-              {...register("password")}
-            />
-
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-            >
-              {showPassword ? (
-                <EyeOff className="h-5 w-5" />
-              ) : (
-                <Eye className="h-5 w-5" />
-              )}
-            </button>
-          </div>
-
-          {errors.password && (
-            <p className="mt-2 text-sm text-red-500">
-              {errors.password.message}
-            </p>
-          )}
-        </div>
-
-        {/* Remember Me */}
-        <label className="flex items-center gap-3 text-sm text-muted-foreground">
-          <input type="checkbox" className="h-4 w-4 rounded accent-primary" />
-
-          <span>Remember me</span>
-        </label>
-
-        {/* Login */}
-        <Button
-          type="submit"
-          disabled={isPending}
-          className="h-12 w-full rounded-xl text-base font-semibold"
-        >
-          {isPending ? "Signing In..." : "Login"}
-        </Button>
-
-        {/* Register */}
-        <p className="text-center text-sm text-muted-foreground">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/register"
-            className="font-semibold text-primary hover:underline"
-          >
-            Create Account
-          </Link>
-        </p>
-
-        {/* Footer */}
-        <p className="pt-2 text-center text-xs leading-5 text-muted-foreground">
-          By signing in, you agree to our{" "}
-          <span className="font-medium text-foreground">Terms of Service</span>{" "}
-          and{" "}
-          <span className="font-medium text-foreground">Privacy Policy</span>.
-        </p>
-      </form>
-    </Card>
-  );
+    )
 }
+
+export default LoginForm
