@@ -7,3 +7,11 @@ export interface LoginApiErrorResponse {
     refreshToken: string;
   }
 }
+
+
+export interface ApiResponse<T> {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: T;
+}

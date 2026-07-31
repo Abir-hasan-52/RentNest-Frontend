@@ -33,7 +33,7 @@ const navItems = [
 ];
 
 const userMenuItems = [
-    { label: "Profile", icon: User, href: "/profile" },
+    { label: "Profile", icon: User, href: "/dashboard/profile" },
     { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
 ];
 

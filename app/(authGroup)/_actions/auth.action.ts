@@ -69,28 +69,6 @@ export const loginAction = async (
     };
   }
 
-  // if (result?.success && result.data) {
-  //     const cookieStore = await cookies();
-
-  //     cookieStore.set("accessToken", result.data.accessToken, {
-  //         httpOnly: true,
-  //         maxAge: 60 * 60 * 24,
-  //         sameSite: "lax",
-  //         secure: process.env.NODE_ENV === "production",
-  //         path: "/",
-  //     });
-
-  //     cookieStore.set("refreshToken", result.data.refreshToken, {
-  //         httpOnly: true,
-  //         maxAge: 60 * 60 * 24 * 7,
-  //         sameSite: "lax",
-  //         secure: process.env.NODE_ENV === "production",
-  //         path: "/",
-  //     });
-
-  //     redirect("/dashboard/admin");
-  // }
-
   if (result?.success && result.data) {
     const cookieStore = await cookies();
 
@@ -117,14 +95,6 @@ export const loginAction = async (
     } else if (decodedToken.role === "LANDLORD") {
       redirect("/dashboard/landlord");
     }
-
-    // if(decodedToken.role === "USER"){
-    //     redirect("/dashboard");
-    // } else if (decodedToken.role === "ADMIN"){
-    //     redirect("/admin-dashboard");
-    // } else if (decodedToken.role === "AUTHOR"){
-    //     redirect("/author-dashboard");
-    // }
   }
 
   return result;
