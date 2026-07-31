@@ -9,7 +9,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { updateProfileAction, ActionState } from "../_actions/updateProfile.action";
+import {
+  updateProfileAction,
+  ActionState,
+} from "../_actions/updateProfile.action";
 
 const initialState: ActionState = { success: false, message: "" };
 
@@ -18,7 +21,10 @@ type EditProfileFormProps = {
 };
 
 export default function EditProfileForm({ user }: EditProfileFormProps) {
-  const [state, action, pending] = useActionState(updateProfileAction, initialState);
+  const [state, action, pending] = useActionState(
+    updateProfileAction,
+    initialState,
+  );
   const [preview, setPreview] = useState(user.profileImage ?? "");
   const router = useRouter();
 
@@ -39,6 +45,7 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
         <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
           Edit profile
         </h2>
+
         <p className="text-muted-foreground">
           Update your personal information
         </p>
