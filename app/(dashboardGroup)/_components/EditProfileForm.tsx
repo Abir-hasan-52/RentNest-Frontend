@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { IUser } from "@/types/user.type";
-import { ImageIcon, Loader2, MapPin, Phone, User } from "lucide-react";
+import { ImageIcon, Info, Loader2, MapPin, Phone, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
@@ -27,7 +27,7 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
   );
   const [preview, setPreview] = useState(user.profileImage ?? "");
   const router = useRouter();
-
+  const isAdmin = user?.role === "ADMIN";
   useEffect(() => {
     if (!state.message) return;
 
@@ -49,6 +49,13 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
         <p className="text-muted-foreground">
           Update your personal information
         </p>
+
+        {isAdmin && (
+    <p className="flex items-center justify-center gap-1.5 text-sm text-destructive font-medium">
+      <Info className="h-4 w-4" />
+      Admin users cannot change their profile information.
+    </p>
+  )}
       </div>
 
       <form action={action} className="space-y-5" noValidate>
@@ -156,7 +163,7 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
         <div className="flex flex-col gap-3 pt-2 sm:flex-row">
           <Button
             type="submit"
-            disabled={pending}
+            disabled={pending || isAdmin}
             className="h-12 flex-1 rounded-xl text-base font-semibold"
           >
             {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -169,7 +176,7 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
             variant="outline"
             className="h-12 flex-1 rounded-xl text-base font-semibold"
           >
-            <Link href="/profile">Cancel</Link>
+            <Link href="/dashboard/profile">Cancel</Link>
           </Button>
         </div>
       </form>

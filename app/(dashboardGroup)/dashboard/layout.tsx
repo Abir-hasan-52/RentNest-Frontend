@@ -1,21 +1,22 @@
-import { Navbar } from "@/components/shared/navbar";
-import { getMe } from "@/services/getMe";
-// import { getMe } from "@/service/getMe";
+import { LeftSidebar } from "../_components/LeftSidebar";
+import { TopHeader } from "../_components/TopHeader";
 
-const DashboardLayout = async (
-    {
-        children
-    } : {
-        children: React.ReactNode
-    }
-) => {
-    const user = await getMe();
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div>
-      <Navbar user={user}/>
-      {children}
-    </div>
-  )
-}
+    <div className="flex min-h-screen bg-background">
+      <LeftSidebar />
 
-export default DashboardLayout
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <TopHeader />
+
+        <main className="flex-1 overflow-y-auto bg-muted/20 p-4 sm:p-6 lg:p-8">
+          <div className="mx-auto max-w-6xl">{children}</div>
+        </main>
+      </div>
+    </div>
+  );
+}

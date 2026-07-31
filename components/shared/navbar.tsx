@@ -21,7 +21,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { logout } from "@/services/logout";
-import { IUser } from "@/types/user.type";
+import { IUser, Role } from "@/types/user.type"; // Role ইম্পোর্ট নিশ্চিত করুন
 import { LayoutDashboard, LogOut, Menu, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -30,17 +30,13 @@ import { toast } from "sonner";
 import { Logo } from "../shared/Logo";
 import { Button } from "../ui/button";
 import { ModeToggle } from "./themeBtn";
+import { getDashboardPath } from "@/app/lib/dashboard-path";
 
 const navItems = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Property", href: "/properties" },
   { label: "Contact", href: "/contact" },
-];
-
-const userMenuItems = [
-  { label: "Profile", icon: User, href: "/dashboard/profile" },
-  { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
 ];
 
 type NavbarProps = {
@@ -52,6 +48,17 @@ export function Navbar({ user }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isLoggedIn = !!user?.success;
+
+   
+  const dashboardRoute = user?.data?.role 
+    ? getDashboardPath(user.data.role as Role) 
+    : "/";
+
+  
+  const userMenuItems = [
+    { label: "Profile", icon: User, href: "/dashboard/profile" },
+    { label: "Dashboard", icon: LayoutDashboard, href: dashboardRoute },
+  ];
 
   const handleLogout = async () => {
     try {
