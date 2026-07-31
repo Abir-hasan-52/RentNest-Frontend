@@ -1,8 +1,8 @@
-type Role = "ADMIN" | "LANDLORD" | "TENANT";
+export type Role = "ADMIN" | "LANDLORD" | "TENANT";
 
-type UserStatus = "ACTIVE" | "BANNED";
+export type UserStatus = "ACTIVE" | "BANNED";
 
-export default interface IUser {
+export interface IUser {
   success: boolean;
   message: string;
   data: {

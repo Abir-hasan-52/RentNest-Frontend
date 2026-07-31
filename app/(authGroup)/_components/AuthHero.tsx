@@ -1,19 +1,15 @@
+import { Logo } from "@/components/shared/Logo";
 import { CheckCircle2, House, ShieldCheck } from "lucide-react";
-import Link from "next/link";
 
 export default function AuthHero() {
   return (
     <div className="hidden flex-col justify-center lg:flex">
-      <div className="mb-8 flex h-20 w-20 items-center justify-center rounded-3xl bg-primary text-primary-foreground shadow-xl shadow-primary/20">
-      <Link href={"/"} >
-        <House size={40} />
-        </Link>
-      </div>
-      <Link href={"/"} >
-        <h1 className="text-5xl font-bold tracking-tight text-balance">
-          Welcome to <span className="text-primary">RentNest</span>
-        </h1>
-      </Link>
+      <Logo showText={false} className="mb-8" iconClassName="h-16 w-16 lg:h-20 lg:w-20" />
+
+      <h1 className="text-5xl font-bold tracking-tight text-balance">
+        Welcome to <span className="text-primary">RentNest</span>
+      </h1>
+
       <p className="mt-6 max-w-lg text-lg text-muted-foreground text-pretty">
         Find verified rental properties, connect with trusted landlords, and
         manage everything in one secure platform.

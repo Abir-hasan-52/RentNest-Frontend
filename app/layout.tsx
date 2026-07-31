@@ -3,7 +3,7 @@ import { Noto_Serif, Raleway } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import TanstackProvider from "@/providers/TanstackProvider";
-import { Navbar } from "@/components/shared/navbar";
+ 
  
 
 const ralewayHeading = Raleway({
