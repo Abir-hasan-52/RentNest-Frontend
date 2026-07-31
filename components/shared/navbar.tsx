@@ -29,6 +29,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Logo } from "../shared/Logo";
 import { Button } from "../ui/button";
+import { ModeToggle } from "./themeBtn";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -82,26 +83,23 @@ export function Navbar({ user }: NavbarProps) {
             ))}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            
+            {/* Theme Toggle Button - Visible everywhere */}
+            <ModeToggle />
+
             {/* User / auth area — desktop */}
             <div className="hidden md:block">
               {isLoggedIn ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    {/* <button
-                                            className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 outline-none ring-ring transition-colors hover:bg-primary/15 focus-visible:ring-2"
-                                            aria-label="Open user menu"
-                                        >
-                                            <User className="h-4 w-4 text-primary" />
-                                        </button> */}
                     <Avatar className="h-9 w-9 cursor-pointer ring-1 ring-primary/20">
                       <AvatarImage
-                        src={user?.data.profileImage || ""}
-                        alt={user?.data.name || "User"}
+                        src={user?.data?.profileImage || ""}
+                        alt={user?.data?.name || "User"}
                       />
-
                       <AvatarFallback>
-                        {user?.data.name?.charAt(0).toUpperCase() || "U"}
+                        {user?.data?.name?.charAt(0).toUpperCase() || "U"}
                       </AvatarFallback>
                     </Avatar>
                   </DropdownMenuTrigger>
@@ -129,7 +127,7 @@ export function Navbar({ user }: NavbarProps) {
                       );
                     })}
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
+                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>Log out</span>
                     </DropdownMenuItem>
