@@ -3,6 +3,8 @@
 import {
   PropertyListResponse,
   PropertyQueryParams,
+  PropertyResponse,
+  PropertyReviewResponse,
 } from "@/types/property.types";
 
 const API_URL = process.env.BACKEND_API_URL;
@@ -44,7 +46,7 @@ export async function getProperties(
 
 export async function getPropertyById(
   id: string
-): Promise<PropertyListResponse> {
+): Promise<PropertyResponse> {
   const res = await fetch(
     `${API_URL}/api/public/properties/${id}`,
     {
@@ -57,6 +59,27 @@ export async function getPropertyById(
 
   if (!res.ok) {
     throw new Error("Failed to fetch property");
+  }
+  const result = await res.json();
+  console.log(result)
+  return result;
+}
+
+export async function getPropertyReviews(
+  id: string
+): Promise<PropertyReviewResponse> {
+  const res = await fetch(
+    `${API_URL}/api/public/properties/${id}/reviews`,
+    {
+      next: {
+        revalidate: 60,
+        tags: [`property-reviews-${id}`],
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch property reviews.");
   }
 
   return res.json();

@@ -64,3 +64,34 @@ export interface PropertyQueryParams {
   sortBy?: string;
   sortOrder?: string;
 }
+
+export interface PropertyResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: Property;
+}
+
+export interface PropertyReview {
+  id: string;
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+
+  tenant: {
+    id: string;
+    name: string;
+    profileImage: string | null;
+  };
+}
+
+export interface PropertyReviewResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    averageRating: number;
+    totalReviews: number;
+    reviews: PropertyReview[];
+  };
+}

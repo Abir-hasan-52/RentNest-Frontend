@@ -1,4 +1,4 @@
-import Image from "next/image";
+// import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

@@ -1,14 +1,17 @@
 import { notFound } from "next/navigation";
 
-// import { getPropertyById } from "@/services/property/property.service";
+import {
+  getPropertyById,
+  getPropertyReviews,
+} from "@/services/property.service";
 
 import PropertyGallery from "./_components/PropertyGallery";
 import PropertyHeader from "./_components/PropertyHeader";
 import PropertyInfo from "./_components/PropertyInfo";
 import PropertyDescription from "./_components/PropertyDescription";
+import PropertyReviews from "./_components/PropertyReviews";
 import LandlordCard from "./_components/LandlordCard";
 import RequestPropertyCard from "./_components/RequestPropertyCard";
-import { getPropertyById } from "@/services/property.service";
 
 interface PropertyDetailsPageProps {
   params: Promise<{
@@ -21,13 +24,17 @@ export default async function PropertyDetailsPage({
 }: PropertyDetailsPageProps) {
   const { id } = await params;
 
-  const response = await getPropertyById(id);
+  const [propertyResponse, reviewResponse] = await Promise.all([
+    getPropertyById(id),
+    getPropertyReviews(id),
+  ]);
 
-  if (!response.success) {
+  if (!propertyResponse.success) {
     notFound();
   }
 
-  const property = response.data;
+  const property = propertyResponse.data;
+  const reviewData = reviewResponse.data;
 
   return (
     <section className="container mx-auto px-4 py-8 lg:py-10">
@@ -43,12 +50,18 @@ export default async function PropertyDetailsPage({
 
         {/* Content */}
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {/* Left */}
+          {/* Left Content */}
           <div className="space-y-8 lg:col-span-2">
             <PropertyInfo property={property} />
 
             <PropertyDescription
               description={property.description}
+            />
+
+            <PropertyReviews
+              averageRating={reviewData.averageRating}
+              totalReviews={reviewData.totalReviews}
+              reviews={reviewData.reviews}
             />
 
             <LandlordCard
